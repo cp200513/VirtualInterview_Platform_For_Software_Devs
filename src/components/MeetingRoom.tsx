@@ -5,6 +5,7 @@ import {
   PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
+  VideoPlaceholderProps,
 } from "@stream-io/video-react-sdk";
 import { LayoutListIcon, LoaderIcon, UsersIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,13 @@ import {
 import { Button } from "./ui/button";
 import EndCallButton from "./EndCallButton";
 import CodeEditor from "./CodeEditor";
+
+// Define a simple VideoPlaceholder component
+const VideoPlaceholder = (props: VideoPlaceholderProps) => (
+  <div className="bg-gray-800 flex items-center justify-center text-white">
+    No Video Available
+  </div>
+);
 
 function MeetingRoom() {
   const router = useRouter();
@@ -51,7 +59,11 @@ function MeetingRoom() {
         >
           {/* VIDEO LAYOUT */}
           <div className="absolute inset-0">
-            {layout === "grid" ? <PaginatedGridLayout /> : <SpeakerLayout />}
+            {layout === "grid" ? (
+              <PaginatedGridLayout VideoPlaceholder={VideoPlaceholder} />
+            ) : (
+              <SpeakerLayout VideoPlaceholder={VideoPlaceholder} />
+            )}
 
             {/* PARTICIPANTS LIST OVERLAY */}
             {showParticipants && (
@@ -64,7 +76,6 @@ function MeetingRoom() {
           </div>
 
           {/* VIDEO CONTROLS */}
-
           <div className="absolute bottom-4 left-0 right-0">
             <div className="flex flex-col items-center gap-4">
               <div className="flex items-center gap-2 flex-wrap justify-center px-4">
@@ -112,4 +123,5 @@ function MeetingRoom() {
     </div>
   );
 }
+
 export default MeetingRoom;
